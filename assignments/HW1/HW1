@@ -62,3 +62,16 @@ g) Combination of above “coche” → “coxeee”
 1. speichal = special
 2. woteva  = whatever
 3. helooo = hello
+
+Excersice 4: Normalizing number transliterations
+a)
+
+Pro:
+With the lack of a final state, the Mealy Machines can be used to interpret any lenght and form of inputs
+And the fact that the machines are deterministic means that always the same output will be generated for the same input. 
+
+Con:
+Because the Mealy Machines are deterministic, it also means that all the Meanly Machines need to be written out comepletly. 
+No checks can be done with a final state to see if a word is valid
+
+b)
