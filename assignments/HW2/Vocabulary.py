@@ -32,5 +32,14 @@ class Vocabulary :
     print(frequencyList.items())
 
 
-    def ngramilizer(words) :
+    def ngramilizer(words,n) : #TODO stop at the stop token
+        ngram = list()
+        i = 0
+        while i < len(words):
+            ngram.append(" ".join(words[i:(i + n)])) #get ngram and add to the list
+            i += n + 1;
+
+        return ngram
+
+
 
