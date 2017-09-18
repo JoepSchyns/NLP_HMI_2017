@@ -9,13 +9,21 @@ class SimpleTokenizer :
           (r"[,.'\";:<>?]+",lambda scanner,token:("PUNCTUATION", token)),
           (r"\s+", None), # None == skip token.
         ])
+        self.startStopScanner = re.Scanner([
+            (r"[.?!", lambda scanner, token: ("START_STOP", "STOP START")),
+        ])
 
 
     def tokenize(self,str):
         str = str.lower()
 
+        #TODO add start and stop
+
+        resultSS, remainderSS = self.startStopScanner.scan(str);
+
         for c in string.punctuation:
             str = str.replace(c, "")
 
-        return self.scanner.scan(str);
+        result,remainder = self.scanner.scan(str)
+        return result;
 

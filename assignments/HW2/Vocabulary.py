@@ -1,5 +1,6 @@
 import os
-import glob
+import string
+from collections import defaultdict
 import SimpleTokenizer
 
 class Vocabulary :
@@ -7,12 +8,29 @@ class Vocabulary :
 
     tokenizer = SimpleTokenizer.SimpleTokenizer()
 
+    allWords = list()
+
     for filename in os.listdir(path):
-        print(filename)
+        # print(filename) #print name of the file
         file = open(path + filename,encoding="utf8")
 
         text = file.read()
 
-        print(tokenizer.tokenize(text))
+        tokenizedText = tokenizer.tokenize(text)
 
+        words = list()
+
+        for token in tokenizedText :
+            words.append(token[1])
+
+        allWords.extend(words)
+
+    frequencyList = defaultdict(int)
+    for item in allWords :
+        frequencyList[item] += 1
+
+    print(frequencyList.items())
+
+
+    def ngramilizer(words) :
 
