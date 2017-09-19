@@ -2,12 +2,15 @@ import os
 import string
 from collections import defaultdict
 
+import math
+
 import Ngramizer
 import SimpleTokenizer
 
 class Vocabulary :
     path = '../../datasets/blogs/train/'
-    MAX_FILES = 1;
+    MAX_FILES = math.inf;
+    MAX_NGRAM = 3;
 
     def frequencies(list):
 
@@ -18,10 +21,9 @@ class Vocabulary :
         return frequencyList
 
 
-    tokenizer = SimpleTokenizer.SimpleTokenizer()
-    ngramizer = Ngramizer.Ngramizer()
 
-    allWords = list()
+
+    corpusNgram = Ngramizer.Ngramizer();
 
     amountFiles = 0;
     for filename in os.listdir(path):
@@ -31,26 +33,34 @@ class Vocabulary :
         text = file.read()
 
         print("tokenize")  # print name of the file
-        tokenizedText = tokenizer.tokenize(text)
+        tokenizer = SimpleTokenizer.SimpleTokenizer()
+        tokenizer.tokenize(text)
 
         words = list()
 
-        for token in tokenizedText :
+        for token in tokenizer.tokenizedText :
             words.append(token[1])
 
-        allWords.extend(words)
-
         print("ngramize")  # print name of the file
-        ngramWords = ngramizer.ngramilize(words,3);
-        print(ngramWords);
+        ngramizer = Ngramizer.Ngramizer()
 
+        for i in range(1,MAX_NGRAM + 1) :
+            ngramWords = ngramizer.ngramilize(words,i);
+            #print(ngramWords);
+
+        corpusNgram.extend(ngramizer)
+
+        #stop at the maximum amount of files
         amountFiles += 1
         if amountFiles >= MAX_FILES :
             break
 
 
-    frequencyList = frequencies(allWords);
-    print(frequencyList.items())
+    for ngram in corpusNgram.ngrams :
+        frequencyList = frequencies(ngram);
+        frequencyList = sorted(frequencyList.items(),key=lambda x: x[1], reverse=True)
+        print(frequencyList)
+
 
 
 

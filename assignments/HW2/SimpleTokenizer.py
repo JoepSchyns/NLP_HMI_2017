@@ -5,6 +5,8 @@ class SimpleTokenizer :
 
     START_TOKEN = "START"
     STOP_TOKEN = "STOP"
+    tokenizedText = []
+    remainingText = ""
 
     def __init__(self):
         self.scanner = re.Scanner([
@@ -26,5 +28,7 @@ class SimpleTokenizer :
                 input = input.replace(c, "")
 
         result,remainder = self.scanner.scan(input)
+        self.tokenizedText = result
+        self.remainingText = remainder
         return result
 

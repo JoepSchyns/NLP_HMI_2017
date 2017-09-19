@@ -1,5 +1,7 @@
 import SimpleTokenizer
 class Ngramizer :
+    ngrams = list()
+
     def ngramilize(self,words,n) : #TODO stop at the stop token
         ngram = list()
         i = 0
@@ -8,4 +10,11 @@ class Ngramizer :
                 ngram.append(" ".join(words[i:(i + n)])) #get ngram and add to the list
             i += n + 1;
 
+        self.ngrams.insert(n,ngram)
         return ngram
+
+    def extend(self,ngramizer):
+        for i in range(0,len(ngramizer.ngrams)) :
+            self.ngrams[i].extend(ngramizer.ngrams[i])
+
+        return self.ngrams
