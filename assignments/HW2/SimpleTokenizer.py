@@ -2,26 +2,26 @@ import re
 import string
 
 class SimpleTokenizer :
+
+    START_TOKEN = "START"
+    STOP_TOKEN = "STOP"
+
     def __init__(self):
         self.scanner = re.Scanner([
           (r"[0-9]+",lambda scanner,token:("INTEGER", token)),
           (r"[a-z_]+",lambda scanner,token:("IDENTIFIER", token)),
+         (r"[A-Z_]+", lambda scanner, token: ("IDENTIFIER", token)),
           (r"[,.'\";:<>?]+",lambda scanner,token:("PUNCTUATION", token)),
           (r"\s+", None), # None == skip token.
-        ])
-        self.startStopScanner = re.Scanner([
-            (r"[.?!]", lambda scanner, token: ("START_STOP", "STOP START")),
         ])
 
 
     def tokenize(self,input):
         input = input.lower()
 
-        resultSS, remainderSS = self.startStopScanner.scan(input);
-
         for c in string.punctuation:
             if (c == '.'):
-                input = input.replace(c, "END START")
+                input = input.replace(c, self.STOP_TOKEN + " "  + self.START_TOKEN)
             else:
                 input = input.replace(c, "")
 

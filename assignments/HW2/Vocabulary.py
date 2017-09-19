@@ -1,21 +1,36 @@
 import os
 import string
 from collections import defaultdict
+
+import Ngramizer
 import SimpleTokenizer
 
 class Vocabulary :
     path = '../../datasets/blogs/train/'
+    MAX_FILES = 1;
+
+    def frequencies(list):
+
+        frequencyList = defaultdict(int)
+        for item in list:
+            frequencyList[item] += 1
+
+        return frequencyList
+
 
     tokenizer = SimpleTokenizer.SimpleTokenizer()
+    ngramizer = Ngramizer.Ngramizer()
 
     allWords = list()
 
+    amountFiles = 0;
     for filename in os.listdir(path):
-        # print(filename) #print name of the file
+        print("open:" + filename) #print name of the file
         file = open(path + filename,encoding="utf8")
 
         text = file.read()
 
+        print("tokenize")  # print name of the file
         tokenizedText = tokenizer.tokenize(text)
 
         words = list()
@@ -25,21 +40,20 @@ class Vocabulary :
 
         allWords.extend(words)
 
-    frequencyList = defaultdict(int)
-    for item in allWords :
-        frequencyList[item] += 1
+        print("ngramize")  # print name of the file
+        ngramWords = ngramizer.ngramilize(words,3);
+        print(ngramWords);
 
+        amountFiles += 1
+        if amountFiles >= MAX_FILES :
+            break
+
+
+    frequencyList = frequencies(allWords);
     print(frequencyList.items())
 
 
-    def ngramilizer(words,n) : #TODO stop at the stop token
-        ngram = list()
-        i = 0
-        while i < len(words):
-            ngram.append(" ".join(words[i:(i + n)])) #get ngram and add to the list
-            i += n + 1;
 
-        return ngram
 
 
 
