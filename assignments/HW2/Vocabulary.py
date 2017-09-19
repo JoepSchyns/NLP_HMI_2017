@@ -13,18 +13,12 @@ class Vocabulary :
     MAX_FILES = math.inf;
     MAX_NGRAM = 3;
 
-    def frequencies(list):
-
-        frequencyList = defaultdict(int)
-        for item in list:
-            frequencyList[item] += 1
-
-        return frequencyList
 
 
 
-
-    corpusNgram = Ngramizer.Ngramizer();
+    corpusNgram = Ngramizer.Ngramizer()
+    fCorpusNgram = Ngramizer.Ngramizer() #female corpussy
+    mCorpusNgram = Ngramizer.Ngramizer() # female corpus
 
     amountFiles = 0;
     for filename in os.listdir(path):
@@ -50,23 +44,35 @@ class Vocabulary :
 
         corpusNgram.extend(ngramizer)
 
+        if filename.startswith("F"): # is female corpus
+            fCorpusNgram.extend(ngramizer)
+        else :
+            mCorpusNgram.extend(ngramizer)
+
         #stop at the maximum amount of files
         amountFiles += 1
         if amountFiles >= MAX_FILES :
             break
 
 
+    corpusNgram.calcFrequencies()
+    fCorpusNgram.calcFrequencies()
+    mCorpusNgram.calcFrequencies()
 
 
-    n = 0
-    for ngram in corpusNgram.ngrams :
-        file = open(corpusFile + str(n), 'w+')
-        frequencyList = frequencies(ngram);
-        frequencyList = sorted(frequencyList.items(), key=lambda x: x[1], reverse=True)
-        for word in frequencyList :
-            file.write("%s\n" % str(word))
 
-        n += 1
+    def createCorpusFile(ngramizer,fileName):
+        n = 0
+        for ngramFrequencies in ngramizer.ngramsFrequencies:
+            file = open(fileName + str(n), 'w+')
+            for word in ngramFrequencies:
+                file.write("%s\n" % str(word))
+
+            n += 1
+
+    createCorpusFile(fCorpusNgram,(corpusFile + "F"));
+    createCorpusFile(mCorpusNgram,(corpusFile + "M"));
+
     # n = 0;
     # for ngram in corpusNgram.ngrams :
     #     print("ngram" + str(n))

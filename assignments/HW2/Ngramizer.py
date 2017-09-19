@@ -1,7 +1,11 @@
 import SimpleTokenizer
+from collections import defaultdict
+
+
 class Ngramizer :
     def __init__(self):
         self.ngrams = list()
+        self.ngramsFrequencies = list()
 
     def ngramilize(self,words,n) : #TODO stop at the stop token
         ngram = list()
@@ -22,3 +26,22 @@ class Ngramizer :
                 self.ngrams[i].extend(ngramizer.ngrams[i])
 
         return self.ngrams
+
+    def frequencies(self,list):
+
+        frequencyList = defaultdict(int)
+        for item in list:
+            frequencyList[item] += 1
+
+        return frequencyList
+
+    def calcFrequencies(self):
+        for ngram in self.ngrams:
+            frequencyList = self.frequencies(ngram);
+            frequencyList = sorted(frequencyList.items(), key=lambda x: x[1], reverse=True)
+            self.ngramsFrequencies.append(frequencyList)
+
+        return self.ngramsFrequencies
+
+
+
