@@ -1,6 +1,7 @@
 import SimpleTokenizer
 class Ngramizer :
-    ngrams = list()
+    def __init__(self):
+        self.ngrams = list()
 
     def ngramilize(self,words,n) : #TODO stop at the stop token
         ngram = list()
@@ -15,6 +16,9 @@ class Ngramizer :
 
     def extend(self,ngramizer):
         for i in range(0,len(ngramizer.ngrams)) :
-            self.ngrams[i].extend(ngramizer.ngrams[i])
+            if len(self.ngrams) - 1 < i : #if the ngram does not have the current n
+                self.ngrams.insert(i,ngramizer.ngrams[i])
+            else:
+                self.ngrams[i].extend(ngramizer.ngrams[i])
 
         return self.ngrams

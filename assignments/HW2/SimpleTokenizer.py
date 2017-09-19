@@ -23,7 +23,7 @@ class SimpleTokenizer :
 
         for c in string.punctuation:
             if (c == '.'):
-                input = input.replace(c, self.STOP_TOKEN + " "  + self.START_TOKEN)
+                input = input.replace(c, " " + self.STOP_TOKEN + " "  + self.START_TOKEN)
             else:
                 input = input.replace(c, "")
 
