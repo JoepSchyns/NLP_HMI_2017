@@ -10,20 +10,21 @@ class SimpleTokenizer :
           (r"\s+", None), # None == skip token.
         ])
         self.startStopScanner = re.Scanner([
-            (r"[.?!", lambda scanner, token: ("START_STOP", "STOP START")),
+            (r"[.?!]", lambda scanner, token: ("START_STOP", "STOP START")),
         ])
 
 
-    def tokenize(self,str):
-        str = str.lower()
+    def tokenize(self,input):
+        input = input.lower()
 
-        #TODO add start and stop
-
-        resultSS, remainderSS = self.startStopScanner.scan(str);
+        resultSS, remainderSS = self.startStopScanner.scan(input);
 
         for c in string.punctuation:
-            str = str.replace(c, "")
+            if (c == '.'):
+                input = input.replace(c, "END START")
+            else:
+                input = input.replace(c, "")
 
-        result,remainder = self.scanner.scan(str)
-        return result;
+        result,remainder = self.scanner.scan(input)
+        return result
 
