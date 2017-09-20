@@ -15,7 +15,8 @@ class Ngramizer :
     def __init__(self):
         self.ngrams = list()
         self.ngramsFrequencies = list()
-        self.vSize = list();
+        self.vSize = list()
+        self.wordProb = defaultdict()
 
     def ngramilize(self,words,n) :
         ngram = list()
@@ -23,7 +24,7 @@ class Ngramizer :
         while i < len(words):
             if not (SimpleTokenizer.SimpleTokenizer.START_TOKEN in words[i + 1 : i + n] or SimpleTokenizer.SimpleTokenizer.STOP_TOKEN in words[i : i + n - 1] ) : #wheiter the start and stop token are not in the middle of the n gram
                 ngram.append(" ".join(words[i:(i + n)])) #get ngram and add to the list
-            i += 1;
+            i += 1
 
         self.ngrams.insert(n,ngram)
         return ngram
@@ -84,18 +85,17 @@ class Ngramizer :
 
     K = 99
 
-
-
     def probability(self,freq,K,N,V):
         return (freq + K) / (N+ K * V)
 
     def calculateTotalProb(self,tokensFile,n):
         totalProb = 0;
+        #wordProb = list()
         for token in tokensFile:
             prob = self.findProb(token,len(tokensFile),n)
             if prob > 1 :
                 print(str(token) + " " + str(prob))
-
+            self.wordProb[token] = prob
             totalProb += math.log2(prob)
         return totalProb
 
@@ -107,4 +107,5 @@ class Ngramizer :
                 return self.probability(tokenFrequency[1],self.K,self.vSize[n],amountTokens)
 
         return self.probability(0,self.K,self.vSize[n],amountTokens)
+
 
