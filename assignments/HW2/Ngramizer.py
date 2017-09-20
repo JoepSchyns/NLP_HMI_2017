@@ -15,6 +15,7 @@ class Ngramizer :
     def __init__(self):
         self.ngrams = list()
         self.ngramsFrequencies = list()
+        self.vSize = list();
 
     def ngramilize(self,words,n) :
         ngram = list()
@@ -54,6 +55,7 @@ class Ngramizer :
 
     def readCorpus(self,indentifierName,n):
         for i in range(0,n) :
+            self.vSize.insert(i,0)
             ngramFrequencies = list()
             file = open(self.CORPUS_FILE + indentifierName + str(i), encoding="utf8")
             text = file.read()
@@ -65,6 +67,7 @@ class Ngramizer :
                     ar = [None] * 2
                     ar[0] = split[0]
                     ar[1] = int(split[1])
+                    self.vSize[i] += ar[1]
                     ngramFrequencies.append(ar)
 
             self.ngramsFrequencies.insert(n,ngramFrequencies);
@@ -79,19 +82,19 @@ class Ngramizer :
 
             n += 1
 
-    K = 1
+    K = 0.13
 
 
 
     def probability(self,freq,K,N,V):
-        return (freq + K) / (N + K * V)
+        return (freq + K) / (N+ K * V)
 
     def calculateTotalProb(self,tokensFile,n):
         totalProb = 0;
         for token in tokensFile:
             prob = self.findProb(token,len(tokensFile),n)
-
-            totalProb += math.log10(prob)
+            #print(str(token) + " " + str(prob))
+            totalProb += math.log2(prob)
         return totalProb
 
     def findProb(self,token,amountTokens,n):
@@ -99,7 +102,7 @@ class Ngramizer :
 
         for tokenFrequency in ngramFrequencies:
             if token == tokenFrequency[0] and tokenFrequency[1] > self.MINIMUM_FREQ: #only use words occurentes that are 25 or higher
-                return self.probability(tokenFrequency[1],self.K,len(ngramFrequencies),amountTokens)
+                return self.probability(tokenFrequency[1],self.K,self.vSize[n],amountTokens)
 
-        return self.probability(0,self.K,len(ngramFrequencies),amountTokens)
+        return self.probability(0,self.K,self.vSize[n],amountTokens)
 
