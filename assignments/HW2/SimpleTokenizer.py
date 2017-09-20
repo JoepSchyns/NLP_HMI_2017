@@ -5,8 +5,7 @@ class SimpleTokenizer :
 
     START_TOKEN = "START"
     STOP_TOKEN = "STOP"
-    tokenizedText = []
-    remainingText = ""
+
 
     def __init__(self):
         self.scanner = re.Scanner([
@@ -16,6 +15,9 @@ class SimpleTokenizer :
           (r"[,.'\";:<>?]+",lambda scanner,token:("PUNCTUATION", token)),
           (r"\s+", None), # None == skip token.
         ])
+        self.tokenizedText = []
+        self.remainingText = ""
+        self.words = list();
 
 
     def tokenize(self,input):
@@ -32,3 +34,17 @@ class SimpleTokenizer :
         self.remainingText = remainder
         return result
 
+    def readFile(self,path,filename) :
+        file = open(path + filename, encoding="utf8")
+        text = file.read()
+        return text
+
+    def tokenizeFile(self, path, filename) :
+        text = self.readFile(path,filename)
+        return self.tokenize(text)
+
+
+    def getWords(self) :
+        for token in self.tokenizedText :
+            self.words.append(token[1])
+        return self.words

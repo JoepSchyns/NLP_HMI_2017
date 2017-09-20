@@ -4,12 +4,11 @@ from collections import defaultdict
 
 import math
 
-import Ngramizer
-import SimpleTokenizer
+from assignments.HW2 import Ngramizer
+from assignments.HW2 import SimpleTokenizer
 
 class Vocabulary :
     path = '../../datasets/blogs/train/'
-    corpusFile = "../../datasets/blogs/ngramCorpus.txt"
     MAX_FILES = math.inf;
     MAX_NGRAM = 3;
 
@@ -22,19 +21,12 @@ class Vocabulary :
 
     amountFiles = 0;
     for filename in os.listdir(path):
-        #print("open:" + filename) #print name of the file
-        file = open(path + filename,encoding="utf8")
-
-        text = file.read()
-
-       # print("tokenize")  # print name of the file
         tokenizer = SimpleTokenizer.SimpleTokenizer()
-        tokenizer.tokenize(text)
 
-        words = list()
+        tokenizer.tokenizeFile(path,filename);
 
-        for token in tokenizer.tokenizedText :
-            words.append(token[1])
+
+        words = tokenizer.getWords()
 
        # print("ngramize")  # print name of the file
         ngramizer = Ngramizer.Ngramizer()
@@ -59,19 +51,8 @@ class Vocabulary :
     fCorpusNgram.calcFrequencies()
     mCorpusNgram.calcFrequencies()
 
-
-
-    def createCorpusFile(ngramizer,fileName):
-        n = 0
-        for ngramFrequencies in ngramizer.ngramsFrequencies:
-            file = open(fileName + str(n), 'w+')
-            for word in ngramFrequencies:
-                file.write("%s\n" % str(word))
-
-            n += 1
-
-    createCorpusFile(fCorpusNgram,(corpusFile + "F"));
-    createCorpusFile(mCorpusNgram,(corpusFile + "M"));
+    fCorpusNgram.createCorpusFile("F");
+    mCorpusNgram.createCorpusFile("M");
 
     # n = 0;
     # for ngram in corpusNgram.ngrams :
