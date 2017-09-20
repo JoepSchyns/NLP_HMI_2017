@@ -82,7 +82,7 @@ class Ngramizer :
 
             n += 1
 
-    K = 0.13
+    K = 99
 
 
 
@@ -93,7 +93,9 @@ class Ngramizer :
         totalProb = 0;
         for token in tokensFile:
             prob = self.findProb(token,len(tokensFile),n)
-            #print(str(token) + " " + str(prob))
+            if prob > 1 :
+                print(str(token) + " " + str(prob))
+
             totalProb += math.log2(prob)
         return totalProb
 
