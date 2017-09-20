@@ -77,7 +77,7 @@ class Ngramizer :
         for ngramFrequencies in self.ngramsFrequencies:
             file = open(self.CORPUS_FILE + indentifierName + str(n), 'w+')
             for word in ngramFrequencies:
-                if word[1] > MINIMUM_FREQ :
+                if word[1] > self.MINIMUM_FREQ :
                     file.write("%s\n" % str(word))
 
             n += 1

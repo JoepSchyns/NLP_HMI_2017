@@ -21,8 +21,8 @@ for filename in os.listdir(PATH):
     tokenizer.tokenizeFile(PATH,filename)
     words = tokenizer.getWords()
 
-    probF = fNgramizer.calculateTotalProb(words,0)
-    probM = mNgramizer.calculateTotalProb(words,0)
+    probF = fNgramizer.calculateTotalProb(words,1)
+    probM = mNgramizer.calculateTotalProb(words,1)
     print("female: " + str(probF) + " male: " + str(probM))
     if probF > probM:
         print(filename + " Female ")
